@@ -1,0 +1,61 @@
+
+despmtr   r_hub         1       radius at the hub, m
+despmtr   twist_hub    12       twist at the hub, deg
+despmtr   chord_hub    1.5      chord length at the hub, m
+
+despmtr   r_tip         6      radius at the tip, m
+despmtr   twist_tip    3      twist at the tip, deg
+despmtr   chord_tip    .67      chord length at the tip, m
+
+
+set r_mid (r_hub+r_tip)/2
+set chord_mid (chord_hub+chord_tip)/2
+set twist_mid (twist_hub+twist_tip)/2
+
+
+
+#blade
+patbeg n_blade 3
+    mark
+		#blade root
+		#skbeg 0 0 0
+		#    cirarc .5 .5 0 1 0 0
+		#    cirarc .5 -.5 0 0 0 0
+		#skend
+		#scale .03
+
+		udprim  naca Series 4412
+        rotatez -twist_hub .25 0
+        scale .03
+
+        udprim  naca Series 4412
+        rotatez -twist_hub .25 0
+        scale chord_hub
+        translate -.25*chord_hub 0 r_hub
+
+
+        udprim  naca Series 4412
+        rotatez -twist_tip .25 0
+        scale chord_tip
+        translate -.25*chord_tip 0 r_tip
+    loft 0   
+    rotatey 120*n_blade 0 0
+patend
+
+#nose cone
+skbeg 0 0 0
+	linseg .05 0 0
+	linseg .05 .05 0 
+	spline .05 .08 0
+	spline .03 .15 0
+	spline 0 .2 0
+	linseg 0 0 0
+skend
+revolve 0 0 0 0 1 0 360
+scale 8
+translate 0 -.3 0
+
+end
+    
+
+
