@@ -13,17 +13,17 @@ Package Metadata
 - **entry_points**:: 
 
     [openmdao.component]
-    nreltraining.nreltraining.BEMPerf=nreltraining.nreltraining:BEMPerf
-    nreltraining.nreltraining.ActuatorDisk=nreltraining.nreltraining:ActuatorDisk
-    nreltraining.nreltraining.BEM=nreltraining.nreltraining:BEM
     nreltraining.nreltraining.BladeElement=nreltraining.nreltraining:BladeElement
+    nreltraining.nreltraining.ActuatorDisk=nreltraining.nreltraining:ActuatorDisk
+    nreltraining.nreltraining.BEMPerf=nreltraining.nreltraining:BEMPerf
     nreltraining.nreltraining.AutoBEM=nreltraining.nreltraining:AutoBEM
+    nreltraining.nreltraining.BEM=nreltraining.nreltraining:BEM
     [openmdao.container]
     nreltraining.nreltraining.BEMPerfData=nreltraining.nreltraining:BEMPerfData
-    nreltraining.nreltraining.BEMPerf=nreltraining.nreltraining:BEMPerf
+    nreltraining.nreltraining.BladeElement=nreltraining.nreltraining:BladeElement
     nreltraining.nreltraining.ActuatorDisk=nreltraining.nreltraining:ActuatorDisk
     nreltraining.nreltraining.FlowConditions=nreltraining.nreltraining:FlowConditions
-    nreltraining.nreltraining.BladeElement=nreltraining.nreltraining:BladeElement
+    nreltraining.nreltraining.BEMPerf=nreltraining.nreltraining:BEMPerf
     nreltraining.nreltraining.AutoBEM=nreltraining.nreltraining:AutoBEM
     nreltraining.nreltraining.BEM=nreltraining.nreltraining:BEM
 

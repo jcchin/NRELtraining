@@ -7,7 +7,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
     
-   usage
+   introduction
    building_component
    basic_optimization
    recording_data

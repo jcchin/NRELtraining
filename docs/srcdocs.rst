@@ -12,7 +12,7 @@ Source Documentation
 .. _nreltraining.nreltraining.py:
 
 nreltraining.py
--------------------
+---------------
 
 .. automodule:: nreltraining.nreltraining
    :members:

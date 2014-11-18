@@ -271,35 +271,9 @@ Running your Component
 
 
 So, now you've defined your class and found our reference implementation from the plugin. Let's
-create  an instance of each one and make sure they give the same results. First, click and drag
-``actuator_disk.ActuatorDisk`` from the library and drop it into the ``top`` assembly in the
-dataflow tab. The assembly should become highlighted in blue when you're dropping it in the right
-place. OpenMDAO will ask you  to give an instance name; we went with ``my_ad``. Also, use the same
-process to create an instance of the plugin version of ActuatorDisk and call it  ``plugin_ad``.
+create  an instance of each one and make sure they give the same results. 
 
-.. _`create_actuatordisk`:
-
-.. figure:: create_actuatordisk.png
-    :align: center
-
-    Creating the ActuatorDisk instance in the Dataflow
-
-Double-clicking on either of the newly created ActuatorDisk instances opens their respective
-component editor windows.  From the component editor, you can see all the information about this
-component (e.g., its inputs and outputs).  You'll notice that the inputs are the same for both
-instances since they are at default values. If you check the outputs, you'll see that they are
-all 0. The components are outlined in red right now, because they have not been run and their
-outputs are not yet valid. To run the components, right-click on each one and select ``run``
-from its context menu.  The component outline should change to green, indicating that it is now
-valid. If you look at the outputs, you should see  that Cp is .5 for both instances. You can
-change any input value you want. Try changing the value for `a` to something  else. When you
-change it, the outline should go back to red, since the outputs are no longer valid for the new
-inputs.
-
-.. figure:: my_ad_outputs.png
-    :align: center
-
-    ActuatorDisk outputs
+//TODO
 
 Finishing Up
 =========================================
