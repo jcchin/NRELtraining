@@ -35,6 +35,12 @@ class ActuatorDisk(Component):
         Vu = self.Vu
 
         qA = .5*self.rho*self.Area*Vu**2
+        """
+        rho = .5*self.rho*self.Area*Vu**2
+        area = .5*self.rho*Vu**2
+        Vu = self.rho*self.Area*Vu
+        a = 0
+        """
 
         self.Vd = Vu*(1-2 * a)
         self.Vr = .5*(self.Vu + self.Vd)
@@ -44,6 +50,43 @@ class ActuatorDisk(Component):
 
         self.Cp = self.Ct*(1-a)
         self.power = self.Cp*qA*Vu
+
+        def provideJ(self):
+            self.J = np.zeros((6, 4))
+
+            # d_vr
+            self.J[0, 0] = - self.Vu
+            self.J[0, 3] = 1 - self.a
+
+            # d_vd
+            self.J[1, 0] = -2*self.Vu
+            self.J[1, 3] = 1 - 2*self.a
+
+            # d_ct
+            self.J[2, 0] = 4 - 8*self.a
+
+            # d_thrust
+            self.J[3, 0] = -2.0*self.a*self.Area*self.rho*self.Vu**2 + \
+                                2.0*self.Area*self.rho*self.Vu**2*(-self.a + 1)
+            self.J[3, 1] = 2.0*self.a*self.rho*self.Vu**2*(-self.a + 1)
+            self.J[3, 2] = 2.0*self.a*self.Area*self.Vu**2*(-self.a + 1)
+            self.J[3, 3] = 4.0*self.a*self.Area*self.rho*self.Vu*(-self.a + 1)
+
+            # d_cp
+            self.J[4, 0] = 4*self.a*(2*self.a - 2) + 4*(-self.a + 1)**2
+
+            # d_power
+            self.J[5, 0] = 2.0*self.a*self.Area*self.rho*self.Vu**3*(2*self.a - 2) + \
+                                   2.0*self.Area*self.rho*self.Vu**3*(-self.a + 1)**2
+            self.J[5, 1] = 2.0*self.a*self.rho*self.Vu**3*(-self.a + 1)**2
+            self.J[5, 2] = 2.0*self.a*self.Area*self.Vu**3*(-self.a + 1)**2
+            self.J[5, 3] = 6.0*self.a*self.Area*self.rho*self.Vu**2*(-self.a + 1)**2
+
+        def list_deriv_vars(self):
+            input_keys = ('a', 'Area', 'rho', 'Vu')
+            output_keys = ('Vr', 'Vd','Ct','thrust','Cp','power',)
+            return input_keys, output_keys
+
 
 
 class FlowConditions(VariableTree):
