@@ -1,1 +1,8 @@
 *.DS_Store
+*.egg-info
+*sphinx_build*
+*.tar.gz
+*openmdao_log.txt
+*setup.py
+*pkgdocs.rst
+*srcdocs.rst
