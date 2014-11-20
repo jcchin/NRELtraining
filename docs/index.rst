@@ -10,6 +10,7 @@ Contents:
    introduction
    building_component
    basic_optimization
+   derivatives
    recording_data
    bem
    bem_design
