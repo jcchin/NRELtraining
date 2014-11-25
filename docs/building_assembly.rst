@@ -1,10 +1,65 @@
-.. _`uncon-opt`:
 
-Unconstrained Optimization for Betz Limit
+
+Building an Assembly- Unconstrained Optimization for the Betz Limit
 =============================================================
 
-Setting up the Assembly
+Assembling a model
 -----------------------
+
+Components are connected to form a larger model using a construct in 
+OpenMDAO called an ``Assembly``. Unlike components, assemblies can be nested in even
+larger assemblies. Although nesting assemblies often makes sense from an
+organizational persepctive, there are computational trade-offs to be considered.
+These trade-offs are beyond the scope of this tutorial, but it's generally
+advisable to keep models somewhat shallowly nested.
+
+Assembly files are comprised of the same three parts as a component files.
+
+- Importing Libraries
+- Class Definition
+- Stand-Alone Testing
+
+While importing and testing work exactly the same as :ref:`components <BuildingAComponent>`,
+the assembly class definition requires a configure method
+(as opposed to an execute method in components).
+
+Assembly Class Definition
+=========================================
+An assembly class definition containes a minimum of three things:
+
+- Class name declaration
+- Input and output variable definition
+- Configure method
+
+**Class name declaration**
+
+As an example::
+
+    from openmdao.main.api import Assembly
+
+    class Betz_Limit(Assembly):
+        """Simple wind turbine assembly to calculate the Betz Limit"""
+
+Our class is named ``Betz_Limit`` and it inherents from the Assembly
+base class that we imported above.
+
+**Input/Output Variable Definition**
+
+Next, the inputs and outputs of the component class must be defined.
+
+::
+
+    class Betz_Limit(Assembly):
+        """Simple wind turbine assembly to calculate the Betz Limit"""
+
+        # Inputs
+        a = Float(.5, iotype="in", desc="Induced Velocity Factor")
+
+        # Outputs
+        Vr = Float(iotype="out", desc="Air velocity at rotor exit plane", units="m/s")
+
+So far so easy, this looks almost exactly like a component. Configuration
+introduces a few new OpenMDAO concepts.
 
 Start a new OpenMDAO GUI project from the project screen. You can name it whatever you want, but
 we're going to  call it `Betz Limit`. Once the project opens up, create a ``top`` assembly as you

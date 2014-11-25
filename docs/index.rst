@@ -9,7 +9,7 @@ Contents:
     
    introduction
    building_component
-   basic_optimization
+   building_assembly
    derivatives
    recording_data
    bem

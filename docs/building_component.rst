@@ -1,3 +1,5 @@
+.. _`BuildingAComponent`:
+
 =============================================================
 Building a Component - Actuator Disk
 =============================================================
@@ -185,7 +187,7 @@ created called ``comp``. This component instance is run, and two outputs are
 printed to the console.
 
 
-To summarize, ``actuator_disk.py" is displayed in its entirety below:
+To summarize, ``actuator_disk.py`` is displayed in its entirety below:
 
 .. testcode:: simple_component_actuatordisk
 
