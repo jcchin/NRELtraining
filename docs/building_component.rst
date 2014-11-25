@@ -54,6 +54,8 @@ For this example we will import the base OpenMDAO ``Component`` class,
 and ``Float`` variable type. This provides us with basic boilerplate
 functionality useful for constructing engineering models.
 
+.. _`ComponentDefinition`:
+
 Component Class Definition
 =========================================
 A class definition containes a minimum of three things:
@@ -160,6 +162,7 @@ power. If you define the upstream, rotor, and downstream velocities as
 axial induction factor, :math:`a`, as the amount of velocity extracted from the
 flow. :math:`a = \frac{V_u-V_r}{V_r}`
 
+.. _`ifNameEqualsMain`:
 
 Stand-Alone Testing
 =========================================
@@ -246,7 +249,7 @@ this file. Simply run:
 
 ::
 
-python actuator_disk.py
+    python actuator_disk.py
 
 
 Thats it! You've built and ran your first OpenMDAO component.

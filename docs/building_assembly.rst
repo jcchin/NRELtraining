@@ -24,7 +24,7 @@ the assembly class definition requires a configure method
 (as opposed to an execute method in components).
 
 Assembly Class Definition
-=========================================
+-----------------------
 An assembly class definition containes a minimum of three things:
 
 - Class name declaration
@@ -60,6 +60,79 @@ Next, the inputs and outputs of the component class must be defined.
 
 So far so easy, this looks almost exactly like a component. Configuration
 introduces a few new OpenMDAO concepts.
+
+Configuring Assemblies
+=========================================
+
+OpenMDAO assemblies contain a *method* (function) called configure, it inherits
+from it's class definition ``self`` and contains general information about the
+assemblies internal structure and solver behavior.
+An assembly configuration usually includes:
+
+::
+
+    def configure(self):
+        """things to be configured go here"""
+
+- Adding component/assembly instances
+- Modifying the driver
+- Adding components/assemblies to the workflow
+- Connecting components/assemblies to each other
+
+Let's walk through the reasoning and syntax for each aspect.
+
+**Adding components/assemblies to the workflow**
+
+Although we've defined a component class we need to create an *instance* of the
+object, just as we did in the :ref:`component testing script <ifNameEqualsMain>`.
+If you're unfamiliar with object oriented programming, class definitions are
+analogous to blueprints or templates for a design.
+Instances represent actualized objects created from the blueprint or template.
+
+As an example,
+    ``jeff = teacher()``
+
+    ``tristan = teacher()``
+
+creates two instances, named ``jeff`` and ``tristan``, derived from the same
+class: ``teacher``. We've already used this concept when creating float
+instances in the previous component :ref:`tutorial <ComponentDefinition>`.
+
+``a = Float(.5, iotype="in", desc="Induced Velocity Factor")``
+
+creates an instance of the ``Float`` class called ``a``, with *arguments* within
+the parentheses.
+
+Likewise, this assembly class (or blueprint/template) definition contains
+at least one of instance of a sub-assembly or sub-component.
+
+::
+
+    def configure(self):
+
+        aDisk = self.add('actDisk', ActuatorDisk())
+
+This line does a few things, it creates an instance of the ``ActuatorDisk()``
+class called ``actDisk``, adds it to the 'Betz_Limit' assembly and creates a
+local variable called ``aDisk``. It is perfectly fine (and often much more
+convenient) to name the local variable the same as the instance name.
+
+
+    ``aDisk = self.add('actDisk', ActuatorDisk())``  <--  works
+
+    ``aDisk = self.add('aDisk', ActuatorDisk())`` <-- also works
+
+    ``self.add('aDisk', ActuatorDisk())``  <--is the same as above,
+    but no local variable is created
+
+as discussed earlier, if a local variable isn't created, the variable is
+referenced with the ``self.<variableName>`` prefix. Remember to import any
+classes that you instantiate at the top of the assembly file.
+
+**Modifying the driver**
+
+**Connecting components/assemblies to each other**
+
 
 Start a new OpenMDAO GUI project from the project screen. You can name it whatever you want, but
 we're going to  call it `Betz Limit`. Once the project opens up, create a ``top`` assembly as you
