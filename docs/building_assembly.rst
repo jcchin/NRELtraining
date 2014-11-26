@@ -2,9 +2,11 @@
 
 Building an Assembly- Unconstrained Optimization for the Betz Limit
 =============================================================
-
-Assembling a model
------------------------
+We're going to set up an optimization to look for Betz's limit. This is a well-known result that
+states that for a wind turbine, as you try  to extract more and more velocity from the incoming
+wind, the best you can do is to extract about 60% of the power from the wind. This result comes from
+an analysis of the equations used to build  our ActuatorDisk component. We'll try to use an
+optimizer to confirm that our component returns the correct value for Betz's limit.
 
 Components are connected to form a larger model using a construct in 
 OpenMDAO called an ``Assembly``. Unlike components, assemblies can be nested in even
@@ -58,14 +60,14 @@ Next, the inputs and outputs of the component class must be defined.
         # Outputs
         Vr = Float(iotype="out", desc="Air velocity at rotor exit plane", units="m/s")
 
-So far so easy, this looks almost exactly like a component. Configuration
-introduces a few new OpenMDAO concepts.
+So far so easy, this looks almost exactly like a component. However, the
+configuration method introduces a few new OpenMDAO concepts.
 
 Configuring Assemblies
-=========================================
+-----------------------
 
 OpenMDAO assemblies contain a *method* (function) called configure, it inherits
-from it's class definition ``self`` and contains general information about the
+from it's own class ``self`` and contains general information about the
 assemblies internal structure and solver behavior.
 An assembly configuration usually includes:
 
@@ -75,13 +77,12 @@ An assembly configuration usually includes:
         """things to be configured go here"""
 
 - Adding component/assembly instances
-- Modifying the driver
-- Adding components/assemblies to the workflow
+- Specifying the driver
 - Connecting components/assemblies to each other
 
 Let's walk through the reasoning and syntax for each aspect.
 
-**Adding components/assemblies to the workflow**
+**Adding component/assembly instances**
 
 Although we've defined a component class we need to create an *instance* of the
 object, just as we did in the :ref:`component testing script <ifNameEqualsMain>`.
@@ -127,114 +128,133 @@ convenient) to name the local variable the same as the instance name.
 
 as discussed earlier, if a local variable isn't created, the variable is
 referenced with the ``self.<variableName>`` prefix. Remember to import any
-classes that you instantiate at the top of the assembly file.
+classes that you instantiate at the top of the assembly file. Adding
+sub-assemblies follows the exact same syntax.
 
-**Modifying the driver**
+**Specifying the driver**
+
+OpenMDAO provides a selection of `optimization algorithms 
+<http://openmdao.org/docs/tutorials/optimization/optimizers.html>`_ to drive
+assemblies towards a specified objective. These drop-in algorithms are know as 
+*drivers*. Although a default driver is automatically configured, the user may
+select a different driver, following the same syntax as adding components:
+
+::
+
+    self.driver.add('driver', SLSQPdriver())
+
+Many optimizers also contain tunable settings which can be found by searching
+the `docs <http://openmdao.org/docs/srcdocs/packages/openmdao.lib.html#drivers>`_.
+
+Many models will also contain `implicit iterations
+<http://openmdao.org/docs/tutorials/implicit/index.html>`_ which require
+multiple calculation loops before settling on a converged state. Adding solvers
+follows the same syntax as drivers, and OpenMDAO provides both a `Broyden and 
+Newton Solver <http://openmdao.org/docs/srcdocs/packages/openmdao.lib.html#drivers>`_.
+
+Both drivers and solvers must be given control of a variable that it can modify
+to achieve the user specified goal.
+
+::
+
+    self.driver.add_parameter('self.aDisk.a', low=0, high=1)
+    self.driver.add_objective('-self.aDisk.Cp')
+
+In this example, the driver is allowed to vary the variable ``a`` between 0 and
+1 until ``Cp`` is maximized. Optimizers by default will try to minimize the
+objective, so the objective is set to ``-Cp`` to get a
+maximization. Likewise for solvers, *contraints* can be specified that must be
+satisfied.
+
+``self.solver.add_constraint('self.aDisk.Cp = 0')``
+
+Finally, both drivers and solvers can optionally have a specified *workflow*, which 
+determines the order in which components are executed.
+
+::
+
+    self.driver.workflow.add('aDisk')
+
+Our simple example doens't have a particularly exciting workflow since there is
+only one component. More complex models can provide the workflow as a python
+list of strings.
+
+``self.driver.workflow.add(['comp1','comp2','comp3'])``
 
 **Connecting components/assemblies to each other**
 
+With the drivers/solvers configured, the final step is to wire up connections
+between the various components within the workflow. It's important to remember
+that OpenMDAO distinguished between the dataflow and the workflow. The dataflow
+describes which components communicate with others, but it says nothing about
+when that communication happens. The order of execution is determined by the
+workflow. Although the dataflow does not define the workflow, it can constrain
+it. For example, if you have two components, `a` and `b`,  where `a` has an
+output connected to the input of `b`, then you must run `a` before `b`.  In
+most cases, the automatically created workflow will work just fine.  Just know
+that if you need to modify the workflow to add a sub-solver loop or introduce
+some metamodel training, the flexibility is there. Our simple one component
+example doesn't require passing any variables, but this would be achieved with
+the following syntax
 
-Start a new OpenMDAO GUI project from the project screen. You can name it whatever you want, but
-we're going to  call it `Betz Limit`. Once the project opens up, create a ``top`` assembly as you
-did before. Then filter the library with `nrel` and you should see all the classes for this tutorial.
-Add an instance of ``ActuatorDisk`` from the library to the ``top`` assembly. We named our instance `ad`.
+``self.connect('comp1.a', 'comp2.a')``
 
-Now you've added a component instance into the ``top`` Assembly. But you can't do much with it,
-except set the inputs  and run that component. To set up an optimization, you need to add a
-different driver. So filter the library with `opt` to see a list of optimizers. We're going to
-start with SLSQPdriver for this tutorial. Drag an instance of ``SLSQPdriver`` over to the ``top``
-Assembly and drop it on top of the ``Run_Once`` driver that's already there. The driver should become
-highlighted in blue when you're hover over it. When you drop a component onto an existing
-component, you're  replacing that component rather than creating a new one.
+In this example, the value of output variable ``a`` from ``comp1`` would be
+passed to ``comp2``'s input variable ``a``. It is not necessary for connected
+variables to share the same name, and OpenMDAO will automatically check for
+compatible units.
 
-.. _`relace_driver`:
+As noted previously, only component variables with a specified ``iotype`` from
+the component class definition can be connected. Local variables are not
+accessible. Component variables within a parent assembly can be promoted up as
+I/O variable at the parent's bounadary using the following syntax:
 
-.. figure:: replace_driver.png
-   :align: center
+``self.create_passthrough('self.aDisk.Cp')``  <-- This promoted variable can now be referenced as ``self.a`` in parent connections.
 
-   Replacing something by dropping on top of it
-
-Configure the Optimization
----------------------------
-
-Once you have the SLSQPdriver instance in there, you're ready to configure the optimization.
-Double-click on the driver to bring up its editor window. You should see a few tabs in that window:
-
-* Inputs
-* Parameters
-* Trigger
-* Outputs
-* Objectives
-* Workflow
-* Slots
-* Constraints
-
-The Inputs and Outputs tabs contain variables that are specific to the driver. These could be for
-settings specific to the  optimizer or for framework variables like execution count. To set up the
-optimization we'll first look at the Parameters and Objectives tabs.
-
-We're going to set up an optimization to look for Betz's limit. This is a well-known result that
-states that for a wind turbine, as you try  to extract more and more velocity from the incoming
-wind, the best you can do is to extract about 60% of the power from the wind. This result comes from
-an analysis of the equations used to build  our ActuatorDisk component. We'll try to use an
-optimizer to confirm that our component returns the correct value for Betz's limit.
-
-First, open the Parameters tab. Click on the ``Add Parameter`` button. A small dialog will open up
-that lets you specify which parameter you want to give to the optimizer. If you hit the down arrow,
-you will get a list of all the available variables. Pick ``ad.a``. This is the  axial induction
-factor, or a ratio of the incoming wind velocity to the velocity after it exits the turbine. You'll
-notice that when you picked that variable, the low and high values were automatically filled in for you.
-These came from the variable metadata which specified a low and a high of 0 and 1 respectively. You
-could shrink these ranges if you wished but not expand them. The 0 and 1 are hard limits set by the
-component and can't be violated. We'll leave them as is. You will also notice the optional
-`scaler` and `adder` fields. These are available for you to scale and shift your parameter if
-necessary to give a more stable optimization. Once you hit ``Ok``, you should see the dataflow
-diagram change a bit. The blue connector that showed up indicates that there is an implicit
-connection between the driver and the component.  The connection is implicit because the driver will
-set the value of ``ad.a`` during the optimization, but you can also change the value.  Whatever you
-set the value to will be used as the initial condition for the optimization.
-
-
-.. figure:: add_parameter.png
-    :align: center
-
-If you double-click on an instance now, you will see that the `a` variable in the editor window is also
-highlighted in blue. All variables with implicit connections will be shown in in blue.
-
-.. figure:: connected_var_comp_editor.png
-    :align: center
-
-We also need to specify an objective. Go to the driver's Objectives tab and click ``Add Objective``.
-Optimizers by default will  try to minimize the objective, so set the objective to ``-ad.Cp`` to get a
-maximization. You'll see a new feedback connector  show up in the dataflow when you do this. This
-indicates that the optimizer is now dependent on values from the component.
-
-.. figure:: feedback.png
-    :align: center
-
-
-
-The Workflow
----------------------------
-
-You might have noticed that when you added the first parameter to the optimizer, the workflow changed.
-OpenMDAO figured out that since  the optimizer was varying a value in the `ad` component, it would
-need to be in the workflow for that driver. So it added `ad` to the  workflow for you. It's important
-to remember that OpenMDAO distinguished between the dataflow and the workflow. The dataflow describes
-which  components communicate with others, but it says nothing about when that communication happens.
-The order of execution is determined by the  workflow. Although the dataflow does not define the
-workflow, it can constrain it. For example, if you have two components, `a` and `b`,  where `a` has an
-output connected to the input of `b`, then you must run `a` before `b`.  In most cases, the
-automatically created workflow will work just fine.  Just know that if you need to modify the workflow
-to add a sub-solver loop or introduce some metamodel training, the flexibility is there.
-
+This simplifies variable connections that must be accessible at the top-level
+of nested assemblies.
 
 Run the Optimization
 ---------------------------
 
-So you're ready to run. Just right-click on the assembly ``top`` and pick ``Run`` from the context menu.
-This will cause the whole assembly to execute and will run your optimization for you. Double-click on
-the component when it's finished, and you will see that the optimizer found a value of  approximately
-1/3 for axial induction factor, yielding a power coefficient just under .6. Congratulations! You have
+To summarize, ``betz_limit.py`` is displayed in its entirety below:
+
+.. testcode:: simple_assembly_betzlimit
+
+    from openmdao.main.api import Assembly
+    from openmdao.lib.drivers.slsqpdriver import SLSQPdriver
+    from nreltraining.nreltraining import ActuatorDisk #Import components from the plugin
+
+    class Betz_Limit(Assembly):
+        """Simple wind turbine assembly to calculate the Betz Limit"""
+
+        # Inputs would go here
+
+        # Outputs would go here
+        # Cp = Float(iotype="out", desc="Power Coefficient")
+
+        def configure(self):
+        """things to be configured go here"""
+
+        aDisk = self.add('aDisk', ActuatorDisk())
+
+        driver = self.driver.add('driver', SLSQPdriver())
+        driver.add_parameter('aDisk.a', low=0, high=1)
+        driver.add_objective('-aDisk.Cp')
+        driver.workflow.add('aDisk')
+
+        # self.connect('self.Cp', 'self.aDisk.cp') #promote Cp to the assembly output
+        self.create_passthrough('self.aDisk.Cp') #shortcut for commented code above
+
+    if __name__ == "__main__":
+
+        assembly = Betz_Limit()
+        assembly.run
+
+        print assembly.Cp
+
+Running ``python betz_limit.py`` from an activated terminal will show that the
+optimizer found a value of approximately 1/3 for axial induction factor,
+yielding a power coefficient just under .6. Congratulations! You have
 just found Betz's limit. You can close down the project for now.
 
