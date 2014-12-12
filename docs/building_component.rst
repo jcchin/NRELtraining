@@ -176,7 +176,7 @@ This is often helpful for debugging as you build up your model.
     if __name__ == "__main__":
 
         comp = ActuatorDisk()
-        comp.run
+        comp.run()
 
         print comp.power
         print comp.thrust
