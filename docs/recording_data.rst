@@ -6,12 +6,11 @@ results.  In OpenMDAO, data recording is done through a special type of object c
 `CaseRecorder.` OpenMDAO comes  with a number of different kinds of CaseRecorders built into the
 standard library, but you could also design your own if you have special needs. 
 
-From ``openmdao.lib.casehandlers.api`` you can get:
+From ``openmdao.lib.casehandlers.api`` you have a variety of options, such as:
 
-* **DumpCaseRecorder:** Dumps all case data to stdout
-* **CSVCaseRecorder:** Saves all case data to csv file
-* **DBCaseRecorder:** Saves all case data to a SQLite database
-* **ListCaseRecorder:** Saves all case data in memory to a Python list
+* **JSONCaseRecorder:** Dumps all case data to a JSON file
+* **BSONCaseRecorder:** Saves all case data to a BSON file
+* **CSVCaseRecorder:** Saves all case data to a CSV file
 
 Drivers and CaseRecorders
 -------------------------------------------------------------

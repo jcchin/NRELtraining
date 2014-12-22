@@ -1,6 +1,8 @@
 from openmdao.main.api import Assembly
 from openmdao.lib.drivers.slsqpdriver import SLSQPdriver
-from nreltraining.nreltraining import ActuatorDisk #Import components from the plugin
+from actuator_disc_derivatives import ActuatorDisc #Import components from the plugin
+
+import time
 
 class Betz_Limit(Assembly):
     """Simple wind turbine assembly to calculate the Betz Limit"""
@@ -11,21 +13,31 @@ class Betz_Limit(Assembly):
     # Cp = Float(iotype="out", desc="Power Coefficient")
 
     def configure(self):
-    """things to be configured go here"""
+        """things to be configured go here"""
 
-    aDisk = self.add('aDisk', ActuatorDisk())
+        aDisc = self.add('aDisc', ActuatorDisc())
 
-    driver = self.driver.add('driver', SLSQPdriver())
-    driver.add_parameter('aDisk.a', low=0, high=1)
-    driver.add_objective('-aDisk.Cp')
-    driver.workflow.add('aDisk')
+        driver = self.add('driver', SLSQPdriver())
 
-    # self.connect('self.Cp', 'self.aDisk.cp') #promote Cp to the assembly output
-    self.create_passthrough('self.aDisk.Cp') #shortcut for commented code above
+        driver.add_parameter('aDisc.a', low=0, high=1)
+        driver.add_parameter('aDisc.Area', low=0, high=1)
+        driver.add_parameter('aDisc.rho', low=0, high=1)
+        driver.add_parameter('aDisc.Vu', low=0, high=1)
+
+        driver.add_objective('-aDisc.Cp')
+        driver.workflow.add('aDisc')
+
+        driver.tolerance = .00000001
+
+        # self.connect('self.Cp', 'self.aDisc.cp') #promote Cp to the assembly output
+
+        self.create_passthrough('aDisc.Cp') #shortcut for commented code above
 
 if __name__ == "__main__":
 
     assembly = Betz_Limit()
-    assembly.run
+    t = time.time()
+    assembly.run()
+    print "time:", time.time() - t
 
-    print assembly.Cp
+    print "Cp:", assembly.Cp

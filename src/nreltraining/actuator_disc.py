@@ -1,12 +1,12 @@
 from openmdao.main.api import Component
 from openmdao.lib.datatypes.api import Float
 
-class ActuatorDisk(Component):
-    """Simple wind turbine model based on actuator disk theory"""
+class ActuatorDisc(Component):
+    """Simple wind turbine model based on actuator disc theory"""
 
     # inputs
     a = Float(.5, iotype="in", desc="Induced Velocity Factor")
-    Area = Float(10, iotype="in", desc="Rotor disk area", units="m**2", low=0)
+    Area = Float(10, iotype="in", desc="Rotor disc area", units="m**2", low=0)
     rho = Float(1.225, iotype="in", desc="air density", units="kg/m**3")
     Vu = Float(10, iotype="in", desc="Freestream air velocity, upstream of rotor", units="m/s")
 
@@ -36,8 +36,9 @@ class ActuatorDisk(Component):
 
 if __name__ == "__main__":
 
-    comp = ActuatorDisk()
+    comp = ActuatorDisc()
     comp.run()
 
     print comp.power
     print comp.thrust
+    print comp.Cp

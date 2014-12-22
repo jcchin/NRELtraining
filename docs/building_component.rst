@@ -1,17 +1,17 @@
 .. _`BuildingAComponent`:
 
 =============================================================
-Building a Component - Actuator Disk
+Building a Component - Actuator Disc
 =============================================================
 
 In this tutorial, we're going to define a component that uses
-actuator disk theory to provide a very simple model of a wind turbine. 
+actuator disc theory to provide a very simple model of a wind turbine. 
 We will reproduce an engineering design limitation known as the Betz limit.
 
-.. figure:: actuator_disk.png
+.. figure:: actuator_disc.png
    :align: center
 
-   Actuator disk
+   Actuator disc
 
 A component takes a set of inputs and operates on them to produce a set of
 outputs. In the OpenMDAO framework, a class called *Component*
@@ -76,10 +76,10 @@ Just as you would define a class in standard python, you follow the syntax
 
 As an example::
 
-    class ActuatorDisk(Component):
-        """Simple wind turbine model based on actuator disk theory"""
+    class ActuatorDisc(Component):
+        """Simple wind turbine model based on actuator disc theory"""
 
-Our class is named ``ActuatorDisk`` and it inherents from the Component
+Our class is named ``ActuatorDisc`` and it inherents from the Component
 base class that we imported above. The second line containing triple quotes
 provides a brief description of the class. 
 
@@ -89,12 +89,12 @@ Next, the inputs and outputs of the component class must be defined.
 
 ::
 
-    class ActuatorDisk(Component):
-        """Simple wind turbine model based on actuator disk theory"""
+    class ActuatorDisc(Component):
+        """Simple wind turbine model based on actuator disc theory"""
 
         # inputs
         a = Float(.5, iotype="in", desc="Induced Velocity Factor")
-        Area = Float(10, iotype="in", desc="Rotor disk area", units="m**2", low=0)
+        Area = Float(10, iotype="in", desc="Rotor disc area", units="m**2", low=0)
         rho = Float(1.225, iotype="in", desc="air density", units="kg/m**3")
         Vu = Float(10, iotype="in", desc="Freestream air velocity, upstream of rotor", units="m/s")
 
@@ -149,13 +149,13 @@ operations of the component.
             self.power = self.Cp*qA*Vu
 
 As standard Python convention, this internal method inherits from ``self``
-(Actuator Disk), and all I/O variables are referenced with the prefix ``self.<variableName>``.
+(Actuator Disc), and all I/O variables are referenced with the prefix ``self.<variableName>``.
 Local variables can be defined for convenience, as done with ``a``, ``Vu``, and ``qA``. 
 These variables can only be called locally from within the method and 
 any references to local variables outside of this method will throw errors.
 Only I/O variables from the class definition will be accessible elsewhere. 
 
-In this particular execution method, we treat the entire rotor as a single disk
+In this particular execution method, we treat the entire rotor as a single disc
 that extracts velocity uniformly from the incoming flow and converts it to
 power. If you define the upstream, rotor, and downstream velocities as
 :math:`V_u`, :math:`V_r`, :math:`V_d` respectively, then you can describe the
@@ -175,7 +175,7 @@ This is often helpful for debugging as you build up your model.
 
     if __name__ == "__main__":
 
-        comp = ActuatorDisk()
+        comp = ActuatorDisc()
         comp.run()
 
         print comp.power
@@ -185,25 +185,25 @@ In this snippet, the ``if __name__ == "__main__":`` is a common Python pattern
 that in plain english means "if this file is called directly, run the following commands"
 This section is ignored if the component class is instantiated elsewhere.
 
-In this particular run script, an *instance* of the ActuatorDisk class is
+In this particular run script, an *instance* of the ActuatorDisc class is
 created called ``comp``. This component instance is run, and two outputs are
 printed to the console.
 
 
-To summarize, ``actuator_disk.py`` is displayed in its entirety below:
+To summarize, ``actuator_disc.py`` is displayed in its entirety below:
 
-.. testcode:: simple_component_actuatordisk
+.. testcode:: simple_component_actuatordisc
 
     from openmdao.main.api import Component
     from openmdao.lib.datatypes.api import Float
 
 
-    class ActuatorDisk(Component):
-        """Simple wind turbine model based on actuator disk theory"""
+    class ActuatorDisc(Component):
+        """Simple wind turbine model based on actuator disc theory"""
 
         # inputs
         a = Float(.5, iotype="in", desc="Induced Velocity Factor")
-        Area = Float(10, iotype="in", desc="Rotor disk area", units="m**2", low=0)
+        Area = Float(10, iotype="in", desc="Rotor disc area", units="m**2", low=0)
         rho = Float(1.225, iotype="in", desc="air density", units="kg/m**3")
         Vu = Float(10, iotype="in", desc="Freestream air velocity, upstream of rotor", units="m/s")
 
@@ -233,7 +233,7 @@ To summarize, ``actuator_disk.py`` is displayed in its entirety below:
 
     if __name__ == "__main__":
 
-        comp = ActuatorDisk()
+        comp = ActuatorDisc()
         comp.run
 
         print comp.power
@@ -249,7 +249,7 @@ this file. Simply run:
 
 ::
 
-    python actuator_disk.py
+    python actuator_disc.py
 
 
 Thats it! You've built and ran your first OpenMDAO component.

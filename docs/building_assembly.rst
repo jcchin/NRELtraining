@@ -141,7 +141,7 @@ select a different driver, following the same syntax as adding components:
 
 ::
 
-    self.driver.add('driver', SLSQPdriver())
+    self.add('driver', SLSQPdriver())
 
 Many optimizers also contain tunable settings which can be found by searching
 the `docs <http://openmdao.org/docs/srcdocs/packages/openmdao.lib.html#drivers>`_.
@@ -181,6 +181,15 @@ list of strings.
 
 ``self.driver.workflow.add(['comp1','comp2','comp3'])``
 
+
+We can also set a variety of options for the optimization driver (tolerances,
+output format, etc). Let's bump up the tolerance level:
+
+::
+
+    driver.tolerance = .00000001
+
+
 **Connecting components/assemblies to each other**
 
 With the drivers/solvers configured, the final step is to wire up connections
@@ -209,7 +218,7 @@ the component class definition can be connected. Local variables are not
 accessible. Component variables within a parent assembly can be promoted up as
 I/O variable at the parent's bounadary using the following syntax:
 
-``self.create_passthrough('self.aDisk.Cp')``  <-- This promoted variable can now be referenced as ``self.a`` in parent connections.
+``self.create_passthrough('aDisk.Cp')``  <-- This promoted variable can now be referenced as ``self.a`` in parent connections.
 
 This simplifies variable connections that must be accessible at the top-level
 of nested assemblies.
@@ -224,6 +233,7 @@ To summarize, ``betz_limit.py`` is displayed in its entirety below:
     from openmdao.main.api import Assembly
     from openmdao.lib.drivers.slsqpdriver import SLSQPdriver
     from nreltraining.nreltraining import ActuatorDisk #Import components from the plugin
+    import time
 
     class Betz_Limit(Assembly):
         """Simple wind turbine assembly to calculate the Betz Limit"""
@@ -234,22 +244,26 @@ To summarize, ``betz_limit.py`` is displayed in its entirety below:
         # Cp = Float(iotype="out", desc="Power Coefficient")
 
         def configure(self):
-        """things to be configured go here"""
+            """things to be configured go here"""
 
-        aDisk = self.add('aDisk', ActuatorDisk())
+            aDisk = self.add('aDisk', ActuatorDisk())
 
-        driver = self.driver.add('driver', SLSQPdriver())
-        driver.add_parameter('aDisk.a', low=0, high=1)
-        driver.add_objective('-aDisk.Cp')
-        driver.workflow.add('aDisk')
+            driver = self.add('driver', SLSQPdriver())
+            driver.add_parameter('aDisk.a', low=0, high=1)
+            driver.add_objective('-aDisk.Cp')
+            driver.workflow.add('aDisk')
 
-        # self.connect('self.Cp', 'self.aDisk.cp') #promote Cp to the assembly output
-        self.create_passthrough('self.aDisk.Cp') #shortcut for commented code above
+            driver.tolerance = .00000001
+
+            # self.connect('self.Cp', 'self.aDisk.cp') #promote Cp to the assembly output
+            self.create_passthrough('self.aDisk.Cp') #shortcut for commented code above
 
     if __name__ == "__main__":
 
         assembly = Betz_Limit()
-        assembly.run
+        t = time.time()
+        assembly.run()
+        print "time:", time.time() - t
 
         print assembly.Cp
 
