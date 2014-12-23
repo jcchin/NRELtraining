@@ -337,19 +337,14 @@ if __name__ == "__main__":
     top.add('b', AutoBEM())
     top.driver.workflow.add('b')
 
-    #top.run()
+    top.run()
 
-    print top.b.rpm
-    print top.b.data.Cp
+    print 'rpm:', top.b.rpm
+    print 'cp:', top.b.data.Cp
     print 'top.b.chord_hub: ', top.b.chord_hub
     print 'top.b.chord_tip: ', top.b.chord_tip
     print 'lambda: ', top.b.perf.data.tip_speed_ratio
-    print top.b.BE0.r, top.b.BE0.sigma, top.b.BE0.chord
-    print top.b.BE1.r, top.b.BE1.sigma, top.b.BE1.chord
-    print top.b.BE2.r, top.b.BE2.sigma, top.b.BE2.chord
-    print top.b.BE3.r, top.b.BE3.sigma, top.b.BE3.chord
-    print top.b.BE4.r, top.b.BE4.sigma, top.b.BE4.chord
-    print top.b.BE5.r, top.b.BE5.sigma, top.b.BE5.chord
+
 
     from openmdao.lib.drivers.api import SLSQPdriver
     top.add('driver', SLSQPdriver())
@@ -365,15 +360,9 @@ if __name__ == "__main__":
     top.run()
     print
     print
-    print top.b.rpm
-    print top.b.data.Cp
+    print "rpm:", top.b.rpm
+    print "cp:", top.b.data.Cp
     print 'top.b.chord_hub: ', top.b.chord_hub
     print 'top.b.chord_tip: ', top.b.chord_tip
     print 'lambda: ', top.b.perf.data.tip_speed_ratio
-    print top.b.BE0.r, top.b.BE0.sigma, top.b.BE0.chord
-    print top.b.BE1.r, top.b.BE1.sigma, top.b.BE1.chord
-    print top.b.BE2.r, top.b.BE2.sigma, top.b.BE2.chord
-    print top.b.BE3.r, top.b.BE3.sigma, top.b.BE3.chord
-    print top.b.BE4.r, top.b.BE4.sigma, top.b.BE4.chord
-    print top.b.BE5.r, top.b.BE5.sigma, top.b.BE5.chord
 

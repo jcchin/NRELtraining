@@ -100,10 +100,9 @@ of the derivatives, evaluated at the current state of the model. The order of th
         self.J[2, 0] = 4 - 8*self.a
 
         # d_thrust/d_a
-        self.J[3, 0] = -2.0*a_area_rho_vu**2 + \
-                            2.0*self.Area*rho_times_vu**2*(one_minus_a)
+        self.J[3, 0] = -2.0*self.Area*self.Vu**2*self.a*self.rho + 2.0*self.Area*self.Vu**2*self.rho*one_minus_a
         # d_thrust/d_area
-        self.J[3, 1] = 2.0*self.a*rho_times_vu**2*(one_minus_a)
+        self.J[3, 1] = 2.0*self.Vu**2*self.a*self.rho*one_minus_a
         # d_thrust/d_rho
         self.J[3, 2] = 2.0*a_times_area*self.Vu**2*(one_minus_a)
         # d_thrust/d_Vu
@@ -113,14 +112,13 @@ of the derivatives, evaluated at the current state of the model. The order of th
         self.J[4, 0] = 4*self.a*(2*self.a - 2) + 4*(one_minus_a)**2
 
         # d_power/d_a
-        self.J[5, 0] = 2.0*a_area_rho_vu**3*(2*self.a - 2) + \
-                               2.0*self.Area*rho_times_vu**3*(one_minus_a)**2
+        self.J[5, 0] = 2.0*self.Area*self.Vu**3*self.a*self.rho*(2*self.a - 2) + 2.0*self.Area*self.Vu**3*self.rho*one_minus_a**2
         # d_power/d_area
-        self.J[5, 1] = 2.0*self.a*rho_times_vu**3*(one_minus_a)**2
+        self.J[5, 1] = 2.0*self.Vu**3*self.a*self.rho*one_minus_a**2
         # d_power/d_rho
         self.J[5, 2] = 2.0*a_times_area*self.Vu**3*(one_minus_a)**2
         # d_power/d_vu
-        self.J[5, 3] = 6.0*a_area_rho_vu**2*(one_minus_a)**2
+        self.J[5, 3] = 6.0*self.Area*self.Vu**2*self.a*self.rho*one_minus_a**2
 
         return self.J
 
@@ -199,10 +197,9 @@ To summarize, ``actuator_disc_derivatives.py`` is displayed in its entirety belo
             self.J[2, 0] = 4 - 8*self.a
 
             # d_thrust/d_a
-            self.J[3, 0] = -2.0*a_area_rho_vu**2 + \
-                                2.0*self.Area*rho_times_vu**2*(one_minus_a)
+            self.J[3, 0] = -2.0*self.Area*self.Vu**2*self.a*self.rho + 2.0*self.Area*self.Vu**2*self.rho*one_minus_a
             # d_thrust/d_area
-            self.J[3, 1] = 2.0*self.a*rho_times_vu**2*(one_minus_a)
+            self.J[3, 1] = 2.0*self.Vu**2*self.a*self.rho*one_minus_a
             # d_thrust/d_rho
             self.J[3, 2] = 2.0*a_times_area*self.Vu**2*(one_minus_a)
             # d_thrust/d_Vu
@@ -212,14 +209,13 @@ To summarize, ``actuator_disc_derivatives.py`` is displayed in its entirety belo
             self.J[4, 0] = 4*self.a*(2*self.a - 2) + 4*(one_minus_a)**2
 
             # d_power/d_a
-            self.J[5, 0] = 2.0*a_area_rho_vu**3*(2*self.a - 2) + \
-                                   2.0*self.Area*rho_times_vu**3*(one_minus_a)**2
+            self.J[5, 0] = 2.0*self.Area*self.Vu**3*self.a*self.rho*(2*self.a - 2) + 2.0*self.Area*self.Vu**3*self.rho*one_minus_a**2
             # d_power/d_area
-            self.J[5, 1] = 2.0*self.a*rho_times_vu**3*(one_minus_a)**2
+            self.J[5, 1] = 2.0*self.Vu**3*self.a*self.rho*one_minus_a**2
             # d_power/d_rho
             self.J[5, 2] = 2.0*a_times_area*self.Vu**3*(one_minus_a)**2
             # d_power/d_vu
-            self.J[5, 3] = 6.0*a_area_rho_vu**2*(one_minus_a)**2
+            self.J[5, 3] = 6.0*self.Area*self.Vu**2*self.a*self.rho*one_minus_a**2
 
             return self.J
 
