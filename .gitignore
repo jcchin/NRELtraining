@@ -6,3 +6,5 @@
 *setup.py
 *pkgdocs.rst
 *srcdocs.rst
+*.csv
+*.json
