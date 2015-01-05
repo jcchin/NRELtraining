@@ -8,10 +8,8 @@ will finite difference it during the calculation of the full model gradient. How
 In OpenMDAO, derivatives can be specified in the component API by following
 these two steps:
 
-::
-
-   #  Define a ``list_deriv_vars`` function that tell openmdao which inputs and outputs you have derivatives w.r.t and of
-   #. Define a ``provideJ`` method that calculates and returns the Jacobian.
+    1. Define a ``list_deriv_vars`` function that tell openmdao which inputs and outputs you have derivatives of
+    2. Define a ``provideJ`` method that calculates and returns the Jacobian.
 
 Let's return to the actuator disc component, and show how derivatives can be specified:
 
@@ -158,12 +156,6 @@ To summarize, ``actuator_disc_derivatives.py`` is displayed in its entirety belo
             Vu = self.Vu
 
             qA = .5*self.rho*self.Area*Vu**2
-            """
-            rho = .5*self.rho*self.Area*Vu**2
-            area = .5*self.rho*Vu**2
-            Vu = self.rho*self.Area*Vu
-            a = 0
-            """
 
             self.Vd = Vu*(1-2 * a)
             self.Vr = .5*(self.Vu + self.Vd)

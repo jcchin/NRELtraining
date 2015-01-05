@@ -6,12 +6,12 @@ Building a Component - Actuator Disc
 
 In this tutorial, we're going to define a component that uses
 actuator disc theory to provide a very simple model of a wind turbine. 
-We will reproduce an engineering design limitation known as the Betz limit.
+We will reproduce an engineering design limitation known as the Betz limit. 
 
-.. figure:: actuator_disc.png
-   :align: center
+.. image:: actuator_disk.png
+    :width: 750 px
+    :align: center
 
-   Actuator disc
 
 A component takes a set of inputs and operates on them to produce a set of
 outputs. In the OpenMDAO framework, a class called *Component*
@@ -234,7 +234,7 @@ To summarize, ``actuator_disc.py`` is displayed in its entirety below:
     if __name__ == "__main__":
 
         comp = ActuatorDisc()
-        comp.run
+        comp.run()
 
         print comp.power
         print comp.thrust

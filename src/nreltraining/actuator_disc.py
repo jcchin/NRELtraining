@@ -37,7 +37,7 @@ class ActuatorDisc(Component):
 if __name__ == "__main__":
 
     comp = ActuatorDisc()
-    comp.run()
+    #comp.run()
 
     print comp.power
     print comp.thrust

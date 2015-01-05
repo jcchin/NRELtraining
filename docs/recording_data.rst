@@ -19,43 +19,117 @@ CaseRecorder objects are used by drivers to record the information from your run
 case  is the relevant data from any single run of a driver through its workflow. So in our actuator
 disk example,  a case represents one iteration of the optimizer. 
 
-Drivers have a slot, called `recorders`, which can accept any number of CaseRecorder objects. For
-every iteration, each recorder in the slot will get handed the case to save in its own
-way. This gives you the freedom to  save your case data in multiple ways simultaneously. 
 
-Trying it out
+An assembly can have multiple case recorders associated with it at the same time.
+
+
+Setting Up Case Recording
 -------------------------------------------------------------
+We'll use the Betz limit optimization in order to demonstrate case recording.
+Let's output all of the case data in JSON and CSV format.
 
-If you open up the Betz Limit project from the :ref:`previous tutorial <uncon-opt>`, double-click
-on ``driver``,  and then select the ``Slots`` tab, you can see the empty ``recorders`` slot. To add a
-recorder, first filter the Library by `record` and drag the ``DumpCaseRecorder`` into the empty
-slot. Just accept all the default settings that pop up in  the dialog. 
+To do this, import the `Betz_limit` assembly, as well as OpenMDAO's JSON and CSV
+case recorders:
 
-.. figure:: dump_recorder_slot.png
-   :align: center
+::
 
-When you drop that in, notice that a new empty space  opens up to the right of your
-``DumpCaseRecorder``. This is where you could put another recorder if you wanted to. Let's drop  a
-``CSVCaseRecorder`` in there. Just accept all the default settings in the dialog that pops up here as
-well. Now right-click on the assembly and select ``run`` from the menu. 
+    from betz_limit import Betz_Limit
+    from openmdao.lib.casehandlers.api import JSONCaseRecorder, CSVCaseRecorder
 
-The first thing you'll notice is a bunch of text streaming through the console window at the bottom
-of the screen that looks  something like this: 
+
+Now, create an instance of the `Betz_limit` assembly
+
+::
+
+    assembly = Betz_Limit()
+
+
+Next, create instances of the JSON and CSV case recorders. As an argument,
+both take the filename of where you would like the outputted data to be recorded:
 
 :: 
 
-    Case: 1
-       uuid: 424ee13d-627c-11e2-bdac-a82066196c38
-       inputs:
-          ad.a: 0.5
-       outputs:
-          Objective: -0.5
+    JSON_recorder = JSONCaseRecorder('bentz_limit.json')
+    CSV_recorder = CSVCaseRecorder('bentz_limit.csv')
 
 
-That is the output from the dump case recorder. If you want to see the csv file you recorded, just
-take a look at the Files  tab. You will see two files have shown up there. One is called
-``cases.csv`` and the other will have a name like ``cases_-01-19_16-10-17.csv``.  These two
-files will be identical. What happens is that the CSVCaseRecorder archives all its case
-files with an additional date-time stamp in the name as it creates them. The most recent one will
-be ``cases.csv`` (or whatever name you told it to use), and all the older ones will still be 
-accessible from the date-time stamped files.
+Set both recorders to the assembly by placing them both within the assembly's 
+recorder list:
+
+::
+
+    assembly.recorders = [JSON_recorder, CSV_recorder]
+
+
+Finally run the optimization just as before:
+
+:: 
+
+    assembly.run()
+
+
+This will populate the two files set above with the case data from the 
+optimization.
+
+
+Reading Data From The Case Recorder Output
+-------------------------------------------------
+In the example above, case data was written to JSON and CSV files. These
+are plain-text file formats which can be read-in and post processed in a wide variety
+of ways. But OpenMDAO also has built-in capabilities for reading in 
+these file types and making the recorded data available for queries and post-processing.
+This is accomplished through use of the `CaseDataset` object.
+
+First, import the CaseDataset object from OpenMDAO:
+
+::
+
+    from openmdao.lib.casehandlers.api import CaseDataset
+
+Next, create a CaseDataset object with the filename to be imported, as well as
+the case data ouput type ('json', 'csv', etc.):
+
+::
+
+    cds = CaseDataset("bentz_limit.json", 'json')
+
+
+we can now perform queries directly on the data. For example, to list the name
+of all variables in the data:
+
+::
+
+    cds.data.var_names().fetch()
+
+To query for the values of specific variables across cases:
+
+::
+
+    variables = ["aDisc.a", "aDisc.Cp"]
+
+    our_data = cds.data.vars(variables).fetch()
+
+We can print, plot, and analyze this data directly:
+
+::
+
+    import matplotlib.pyplot as plt
+
+    for area, cp in our_data:
+        plt.plot(area, cp, "ko")
+        plt.xlabel("a")
+        plt.ylabel("Cp")
+        
+    plt.show()
+
+
+
+
+
+
+
+
+
+
+
+    

@@ -10,7 +10,7 @@ class ActuatorDisc(Component):
     a = Float(.5, iotype="in", desc="Induced Velocity Factor")
     Area = Float(10, iotype="in", desc="Rotor disc area", units="m**2", low=0)
     rho = Float(1.225, iotype="in", desc="air density", units="kg/m**3")
-    Vu = Float(10, iotype="in", desc="Freestream air velocity, upstream of rotor", units="m/s")
+    Vu = Float(11, iotype="in", desc="Freestream air velocity, upstream of rotor", units="m/s")
 
     # outputs
     Vr = Float(iotype="out", desc="Air velocity at rotor exit plane", units="m/s")
@@ -27,12 +27,6 @@ class ActuatorDisc(Component):
         Vu = self.Vu
 
         qA = .5*self.rho*self.Area*Vu**2
-        """
-        rho = .5*self.rho*self.Area*Vu**2
-        area = .5*self.rho*Vu**2
-        Vu = self.rho*self.Area*Vu
-        a = 0
-        """
 
         self.Vd = Vu*(1-2 * a)
         self.Vr = .5*(self.Vu + self.Vd)
@@ -66,7 +60,7 @@ class ActuatorDisc(Component):
         self.J[2, 0] = 4 - 8*self.a
 
         # d_thrust/d_a
-        self.J[3, 0] = -2.0*self.Area*self.Vu**2*self.a*self.rho + 2.0*self.Area*self.Vu**2*self.rho*one_minus_a
+        self.J[3, 0] = self.Area*self.Vu**2*self.rho*(-4.0*self.a + 2.0)
         # d_thrust/d_area
         self.J[3, 1] = 2.0*self.Vu**2*self.a*self.rho*one_minus_a
         # d_thrust/d_rho
@@ -99,3 +93,6 @@ if __name__ == "__main__":
     comp.run()
 
     comp.check_gradient()
+
+
+

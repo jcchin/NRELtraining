@@ -13,25 +13,39 @@ Package Metadata
 - **entry_points**:: 
 
     [openmdao.component]
+    nreltraining.nreltraining2.AutoBEM=nreltraining.nreltraining2:AutoBEM
     nreltraining.actuator_disc_derivatives.ActuatorDisc=nreltraining.actuator_disc_derivatives:ActuatorDisc
-    nreltraining.nreltraining.BladeElement=nreltraining.nreltraining:BladeElement
-    nreltraining.nreltraining.ActuatorDisk=nreltraining.nreltraining:ActuatorDisk
+    nreltraining.nreltraining2.ImplicitWithSolver=nreltraining.nreltraining2:ImplicitWithSolver
     nreltraining.betz_limit.Betz_Limit=nreltraining.betz_limit:Betz_Limit
+    nreltraining.nreltraining.BladeElement=nreltraining.nreltraining:BladeElement
+    nreltraining.derivatives_simple.simpleComp=nreltraining.derivatives_simple:simpleComp
+    nreltraining.nreltraining2.BladeElement=nreltraining.nreltraining2:BladeElement
     nreltraining.nreltraining.BEMPerf=nreltraining.nreltraining:BEMPerf
     nreltraining.nreltraining.AutoBEM=nreltraining.nreltraining:AutoBEM
+    nreltraining.nreltraining2.BEMPerf=nreltraining.nreltraining2:BEMPerf
     nreltraining.actuator_disc.ActuatorDisc=nreltraining.actuator_disc:ActuatorDisc
+    nreltraining.actuator_disc_derivatives_sparse.ActuatorDisc=nreltraining.actuator_disc_derivatives_sparse:ActuatorDisc
+    nreltraining.nreltraining2.BEM=nreltraining.nreltraining2:BEM
     nreltraining.nreltraining.BEM=nreltraining.nreltraining:BEM
     [openmdao.container]
-    nreltraining.actuator_disc_derivatives.ActuatorDisc=nreltraining.actuator_disc_derivatives:ActuatorDisc
-    nreltraining.nreltraining.BEMPerfData=nreltraining.nreltraining:BEMPerfData
+    nreltraining.nreltraining2.AutoBEM=nreltraining.nreltraining2:AutoBEM
     nreltraining.nreltraining.BladeElement=nreltraining.nreltraining:BladeElement
-    nreltraining.nreltraining.ActuatorDisk=nreltraining.nreltraining:ActuatorDisk
-    nreltraining.nreltraining.FlowConditions=nreltraining.nreltraining:FlowConditions
     nreltraining.betz_limit.Betz_Limit=nreltraining.betz_limit:Betz_Limit
-    nreltraining.nreltraining.BEMPerf=nreltraining.nreltraining:BEMPerf
     nreltraining.nreltraining.AutoBEM=nreltraining.nreltraining:AutoBEM
     nreltraining.actuator_disc.ActuatorDisc=nreltraining.actuator_disc:ActuatorDisc
+    nreltraining.actuator_disc_derivatives.ActuatorDisc=nreltraining.actuator_disc_derivatives:ActuatorDisc
+    nreltraining.nreltraining2.BEM=nreltraining.nreltraining2:BEM
+    nreltraining.nreltraining2.ImplicitWithSolver=nreltraining.nreltraining2:ImplicitWithSolver
+    nreltraining.nreltraining.BEMPerfData=nreltraining.nreltraining:BEMPerfData
+    nreltraining.nreltraining2.BEMPerfData=nreltraining.nreltraining2:BEMPerfData
+    nreltraining.nreltraining.BEMPerf=nreltraining.nreltraining:BEMPerf
+    nreltraining.actuator_disc_derivatives_sparse.ActuatorDisc=nreltraining.actuator_disc_derivatives_sparse:ActuatorDisc
     nreltraining.nreltraining.BEM=nreltraining.nreltraining:BEM
+    nreltraining.nreltraining2.FlowConditions=nreltraining.nreltraining2:FlowConditions
+    nreltraining.nreltraining.FlowConditions=nreltraining.nreltraining:FlowConditions
+    nreltraining.nreltraining2.BladeElement=nreltraining.nreltraining2:BladeElement
+    nreltraining.nreltraining2.BEMPerf=nreltraining.nreltraining2:BEMPerf
+    nreltraining.derivatives_simple.simpleComp=nreltraining.derivatives_simple:simpleComp
 
 - **keywords:** openmdao
 

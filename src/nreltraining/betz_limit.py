@@ -1,5 +1,5 @@
 from openmdao.main.api import Assembly
-from openmdao.lib.drivers.slsqpdriver import SLSQPdriver
+from openmdao.lib.drivers.api import SLSQPdriver
 from actuator_disc_derivatives import ActuatorDisc #Import components from the plugin
 
 import time
@@ -39,5 +39,6 @@ if __name__ == "__main__":
     t = time.time()
     assembly.run()
     print "time:", time.time() - t
-
+    print "execution count:", assembly.aDisc.exec_count
+    print
     print "Cp:", assembly.Cp

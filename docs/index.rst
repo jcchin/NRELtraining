@@ -13,7 +13,6 @@ Contents:
    derivatives
    recording_data
    bem
-   bem_design
    srcdocs
    pkgdocs
 

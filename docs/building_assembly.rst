@@ -231,7 +231,7 @@ To summarize, ``betz_limit.py`` is displayed in its entirety below:
 .. testcode:: simple_assembly_betzlimit
 
     from openmdao.main.api import Assembly
-    from openmdao.lib.drivers.slsqpdriver import SLSQPdriver
+    from openmdao.lib.drivers.api import SLSQPdriver
     from nreltraining.nreltraining import ActuatorDisk #Import components from the plugin
     import time
 
