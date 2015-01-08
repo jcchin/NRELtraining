@@ -1,6 +1,6 @@
 from openmdao.main.api import Assembly
 from openmdao.lib.drivers.api import SLSQPdriver
-from actuator_disc_derivatives import ActuatorDisc #Import components from the plugin
+from actuator_disc import ActuatorDisc #Import components from the plugin
 
 import time
 
@@ -36,9 +36,10 @@ class Betz_Limit(Assembly):
 if __name__ == "__main__":
 
     assembly = Betz_Limit()
+    assembly.driver.gradient_options.fd_form = 'central'
     t = time.time()
     assembly.run()
     print "time:", time.time() - t
     print "execution count:", assembly.aDisc.exec_count
     print
-    print "Cp:", assembly.Cp
+    print "Cp:", assembly.aDisc.Cp

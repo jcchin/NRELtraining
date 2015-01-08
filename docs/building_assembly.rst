@@ -272,3 +272,42 @@ optimizer found a value of approximately 1/3 for axial induction factor,
 yielding a power coefficient just under .6. Congratulations! You have
 just found Betz's limit. You can close down the project for now.
 
+
+Finite Difference Options
+--------------------------
+
+Most optimization drivers will require derivative values to be estimated in order
+to run. By default, OpenMDAO will automatically compute these via finite-difference 
+approximation. There are a few options for finite difference calculations which
+are available.
+
+These options can all be set to an optimization driver's `gradient_options` object.
+
+::
+
+    assembly.driver.gradient_options.fd_form = 'central'
+    assembly.driver.gradient_options.fd_step = 1.0e-3
+    assembly.driver.gradient_options.fd_step_type = 'relative'
+
+
+You can also choose to calculate the derivatives with the Complex Step method instead of finite difference. Its advantage over finite difference is that its accuracty is not sensitive to the choice of stepsize. However, to use this method, your model needs to be able to operate on complex inputs and produce complex outputs. This will already be true of most python modules, but your external codes may need special modification to use complex step.
+
+
+::
+
+    assembly.driver.gradient_options.fd_form = 'complex_step'
+
+
+
+You can also tell a driver to ignore all analytic derivatives and just use finite difference.
+
+::
+
+    assembly.driver.gradient_options.force_fd = True
+
+
+
+
+
+
+

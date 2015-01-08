@@ -13,7 +13,10 @@ from openmdao.lib.casehandlers.api import JSONCaseRecorder
 from openmdao.lib.drivers.api import SLSQPdriver
 from openmdao.lib.casehandlers.api import CaseDataset, caseset_query_to_html
 
+
+
 class BladeElement(Component):
+
     """Calculations for a single radial slice of a rotor blade"""
 
     # inputs
@@ -88,23 +91,6 @@ class BladeElement(Component):
         return (X[0]-self.a), (X[1]-self.b)
 
 
-class FlowConditions(VariableTree):
-    rho = Float(1.225, desc="air density", units="kg/m**3")
-    V = Float(7., desc="free stream air velocity", units="m/s")
-
-
-class BEMPerfData(VariableTree):
-    """Container that holds all rotor performance data"""
-
-    net_thrust = Float(desc="net axial thrust", units="N")
-    net_power = Float(desc="net power produced", units="W")
-    Ct = Float(desc="thrust coefficient")
-    Cp = Float(desc="power coefficient")
-    J = Float(desc="advance ratio")
-    tip_speed_ratio = Float(desc="tip speed ratio")
-    #eta = Float(desc="turbine efficiency")
-
-
 class BEMPerf(Component):
     """collects data from set of BladeElements and calculates aggregate values"""
 
@@ -148,6 +134,23 @@ class BEMPerf(Component):
 
         omega = self.rpm*2*pi/60
         self.data.tip_speed_ratio = omega*self.r/self.free_stream.V
+
+
+class FlowConditions(VariableTree):
+    rho = Float(1.225, desc="air density", units="kg/m**3")
+    V = Float(7., desc="free stream air velocity", units="m/s")
+
+
+class BEMPerfData(VariableTree):
+    """Container that holds all rotor performance data"""
+
+    net_thrust = Float(desc="net axial thrust", units="N")
+    net_power = Float(desc="net power produced", units="W")
+    Ct = Float(desc="thrust coefficient")
+    Cp = Float(desc="power coefficient")
+    J = Float(desc="advance ratio")
+    tip_speed_ratio = Float(desc="tip speed ratio")
+    #eta = Float(desc="turbine efficiency")
 
 
 class AutoBEM(Assembly):

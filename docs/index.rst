@@ -12,7 +12,4 @@ Contents:
    building_assembly
    derivatives
    recording_data
-   bem
-   srcdocs
-   pkgdocs
 

@@ -25,6 +25,7 @@ class simpleComp(Component):
         return ("x", "y", "A",), ("z",)
 
     def provideJ(self):
+        pass
         J = np.zeros((1, len(self.A) + 2))
 
         J[0,0] = 2*self.x*self.y
@@ -33,30 +34,34 @@ class simpleComp(Component):
 
         return J
 
-# comp = simpleComp()
-# comp.check_gradient()
 
-# class opt(Assembly):
+comp = simpleComp()
+comp.run()
+comp.check_gradient(mode="forward")
+quit()
 
-#     def configure(self):
 
-#         self.add("comp", simpleComp())
+class opt(Assembly):
 
-#         self.add('driver', SLSQPdriver())
-#         self.driver.workflow.add("comp")
+    def configure(self):
+
+        self.add("comp", simpleComp())
+
+        self.add('driver', SLSQPdriver())
+        self.driver.workflow.add("comp")
         
-#         self.driver.add_parameter('comp.A', low=-20, high=20)
-#         self.driver.add_parameter('comp.x', low=0, high=10)
-#         self.driver.add_parameter('comp.y', low=0, high=10)
+        self.driver.add_parameter('comp.A', low=-20, high=20)
+        self.driver.add_parameter('comp.x', low=0, high=10)
+        self.driver.add_parameter('comp.y', low=0, high=10)
 
-#         self.driver.add_objective('comp.z')
+        self.driver.add_objective('comp.z')
 
 
-# import time
-# assm = opt()
+import time
+assm = opt()
 
-# t = time.time()
-# assm.run()
-# print time.time() - t
+t = time.time()
+assm.run()
+print time.time() - t
 
-# print "z:", assm.comp.z
+print "z:", assm.comp.z
