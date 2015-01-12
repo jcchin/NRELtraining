@@ -35,26 +35,32 @@ class simpleComp(Component):
         return J
 
 
-comp = simpleComp()
-comp.run()
-comp.check_gradient(mode="forward")
-quit()
+# comp = simpleComp()
+# comp.run()
+# comp.check_gradient(mode="forward")
+# quit()
 
 
 class opt(Assembly):
 
     def configure(self):
 
-        self.add("comp", simpleComp())
+        self.add("comp1", simpleComp())
+        self.add("comp2", simpleComp())
 
         self.add('driver', SLSQPdriver())
-        self.driver.workflow.add("comp")
+        self.driver.workflow.add(["comp1", "comp2"])
         
-        self.driver.add_parameter('comp.A', low=-20, high=20)
-        self.driver.add_parameter('comp.x', low=0, high=10)
-        self.driver.add_parameter('comp.y', low=0, high=10)
+        self.connect("comp1.z", "comp2.x")
+        self.connect("comp1.x", "comp2.A[0]")
+        self.connect("comp1.z", "comp2.A[1]")
 
-        self.driver.add_objective('comp.z')
+
+        self.driver.add_parameter('comp1.A', low=-20, high=20)
+        self.driver.add_parameter('comp1.x', low=0, high=10)
+        self.driver.add_parameter('comp1.y', low=0, high=10)
+
+        self.driver.add_objective('comp2.z')
 
 
 import time
@@ -64,4 +70,4 @@ t = time.time()
 assm.run()
 print time.time() - t
 
-print "z:", assm.comp.z
+print "z:", assm.comp2.z
