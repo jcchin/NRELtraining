@@ -4,8 +4,8 @@ from openmdao.lib.casehandlers.api import JSONCaseRecorder, CSVCaseRecorder
 
 assembly = Betz_Limit()
 
-JSON_recorder = JSONCaseRecorder('bentz_limit.json')
-CSV_recorder = CSVCaseRecorder('bentz_limit.csv')
+JSON_recorder = JSONCaseRecorder('betz_limit.json')
+CSV_recorder = CSVCaseRecorder('betz_limit.csv')
 
 assembly.recorders = [JSON_recorder, CSV_recorder]
 
