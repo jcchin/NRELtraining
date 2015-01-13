@@ -25,7 +25,6 @@ class simpleComp(Component):
         return ("x", "y", "A",), ("z",)
 
     def provideJ(self):
-        pass
         J = np.zeros((1, len(self.A) + 2))
 
         J[0,0] = 2*self.x*self.y
@@ -35,10 +34,10 @@ class simpleComp(Component):
         return J
 
 
-# comp = simpleComp()
-# comp.run()
-# comp.check_gradient(mode="forward")
-# quit()
+comp = simpleComp()
+comp.run()
+comp.check_gradient(mode="forward")
+#quit()
 
 
 class opt(Assembly):

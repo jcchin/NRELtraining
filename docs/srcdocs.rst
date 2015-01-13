@@ -33,19 +33,6 @@ actuator_disc_derivatives.py
    :show-inheritance:
 
         
-.. index:: actuator_disc_derivatives_sparse.py
-
-.. _nreltraining.actuator_disc_derivatives_sparse.py:
-
-actuator_disc_derivatives_sparse.py
------------------------------------
-
-.. automodule:: nreltraining.actuator_disc_derivatives_sparse
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-        
 .. index:: bem.py
 
 .. _nreltraining.bem.py:
@@ -54,19 +41,6 @@ bem.py
 ------
 
 .. automodule:: nreltraining.bem
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-        
-.. index:: bem2.py
-
-.. _nreltraining.bem2.py:
-
-bem2.py
--------
-
-.. automodule:: nreltraining.bem2
    :members:
    :undoc-members:
    :show-inheritance:
