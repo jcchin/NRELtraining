@@ -51,7 +51,11 @@ These tools help you build models faster, manage large datasets, and visualize t
 Who Uses OpenMDAO?
 ========================
 
-NASA
+Government
+
+- NASA
+- NREL
+- Sandia
 
 Academia
 
@@ -64,8 +68,6 @@ Academia
 
 Industry
 
-- NREL
-- Sandia
 - Boeing
 - AeroVelo
 - M4 Engineering
