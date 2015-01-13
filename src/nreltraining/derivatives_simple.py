@@ -34,10 +34,10 @@ class simpleComp(Component):
         return J
 
 
-comp = simpleComp()
-comp.run()
-comp.check_gradient(mode="forward")
-#quit()
+# comp = simpleComp()
+# comp.run()
+# comp.check_gradient(mode="forward")
+# #quit()
 
 
 class opt(Assembly):
