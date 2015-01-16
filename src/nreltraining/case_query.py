@@ -1,4 +1,4 @@
-from openmdao.lib.casehandlers.api import CaseDataset, caseset_query_to_html
+from openmdao.lib.casehandlers.api import CaseDataset , caseset_query_to_html
 
 import matplotlib.pyplot as plt
 
