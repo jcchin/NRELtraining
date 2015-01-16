@@ -88,21 +88,6 @@ We worked closely with the University of Michigan MDO lab to implement their `pr
 
 When John Hwang did the original work, he was able to converge this problem in about 100 hours. However, about 90% of that time was used calculating derivatives. The huge derivative cost was a function of the way he got derivatives – by solving a linear system that included all the variables in the whole system each time. When we implemented this problem in OpenMDAO, we were able to get the computational cost down to about 6 hours. This pickup was due to our using the data dependency graph to figure out which variables were needed for a given derivative calculation (almost always much less then the full set of variables for the whole problem). Since we shrank the size of the linear system for the derivatives solved by quite a bit, we became a lot more efficient.
 
-**Design Optimization: Quiet Aircraft Wing Slat With Abaqus**
-
-.. raw:: html
-
-        <object width="480" height="385"><param name="movie"
-        value="https://www.youtube.com/watch?v=ghqV6DiBptE"></param><param
-        name="allowFullScreen" value="true"></param><param
-        name="allowscriptaccess" value="always"></param><embed
-        src="https://www.youtube.com/watch?v=ghqV6DiBptE=en_US&fs=1&rel=0"
-        type="application/x-shockwave-flash" allowscriptaccess="always"
-        allowfullscreen="true" width="480"
-        height="385"></embed></object>
- 
-During low speed maneuvers associated with approach and landing, typical transport-class aircraft deploy high lift devices to improve stall and lift characteristics. Unfortunately, this also results in increased airframe noise, of which the leading-edge slat is a significant component. A proposed solution to mitigate slat noise is the development of a slat-cove filler (SCF). The SCF design considered in a current study incorporates shape memory alloys (SMAs), which are a class of active material that undergoes a solid-to-solid phase transformation allowing for large recoverable deformations. SMAs are considered in the current work in order to satisfy three conflicting design requirements: 1) stiffness under aerodynamic loads, 2) compliance to accommodate slat movement, and 3) low overall weight. The researcher is being done by W. Scholten and D. Hartl from the Texas Institute for Intelligent Materials and Structures associated with the `Texas A&M <http://engineering.tamu.edu/aerospace>`_ University Department of Aerospace Engineering in close collaboration with T. Turner at NASA Langley. They are using OpenMDAO to perform a structural design optimization of the SMA-based SCF. The goal of the optimization is to minimize the actuation torque needed to retract the slat and attached SCF. The optimization process considered the highly nonlinear SCF structural response associated with aerodynamic loads and slat retraction/deployment. Structural analysis of SCF design configurations is performed using the Abaqus Unifed FEA suite in combination with custom material models.
-
 OpenMDAO managed the integration of the material and FEA modeling and performed the optimization. The animation, above, is showing three of the hundreds of designs iteratively considered during optimization, including both feasible and infeasible solutions. But lest you think this is meerely a very interesting optimization problem, it turns out they have built and tested a number demonstration prototypes too!
 
  
@@ -130,17 +115,7 @@ A program capable of extracting a heartbeat from video footage from a common web
 
 **Aero-Structural Optimization of Wind Turbine Blades**
 
- .. raw:: html
-
-        <object width="480" height="385"><param name="movie"
-        value="https://www.youtube.com/watch?v=ghqV6DiBptE"></param><param
-        name="allowFullScreen" value="true"></param><param
-        name="allowscriptaccess" value="always"></param><embed
-        src="https://www.youtube.com/watch?v=ghqV6DiBptE"
-        type="application/x-shockwave-flash" allowscriptaccess="always"
-        allowfullscreen="true" width="480"
-        height="385"></embed></object> 
-
+https://www.youtube.com/watch?v=ghqV6DiBptE
  
 A team of researchers from the Technical University of Denmark, F. Zahle, D. Verelst, F. Bertagnolio, and C. Bak,  are using OpenMDAO to perform an aero-structural optimization of wind turbine blades. Their goal is to design airfoils that are more effective over the varied wind conditions seen by wind turbines in real-world conditions. They performed an airfoil optimization that considered aerodynamics at multiple wind conditions with clean and rough blade surfaces. They also considered the structural needs of the blades in order to retain structural integrity. Aerodynamics computations are handled by `XFOIL <http://web.mit.edu/drela/Public/web/xfoil/>`_. or their in-house CFD code, EllipSys2D, and the structural calculations are handled by BECAS. OpenMDAO is managing the interdisciplinary coupling between the aerodynamics and the structures and is facilitating the switching between XFOIL and EllipSys2D. The researchers have made a nice animation of the optimization process.
 
